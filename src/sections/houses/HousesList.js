@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Button } from 'react-native'
-import axios from 'axios'
+import { View, Text, FlatList, Button, StyleSheet } from 'react-native'
+import { AsyncCalls, Colors } from 'react_native_app/src/commons'
 
 export default class HousesList extends Component {
 
@@ -13,26 +13,42 @@ export default class HousesList extends Component {
     }
     
     componentWillMount() {
-
-        axios.get('http://146.185.137.85/got/web/casas')
+        AsyncCalls.fetchHousesList()
         .then((response) => {
-          console.log("axios get response: ", response);
-          const nuestraLista = response.data && response.data.records ? response.data.records : []
-          this.setState({ list : nuestraLista })
-        })
-        .catch((error) => {
-            console.log("axios get error: ", error);
-        });
+            console.log("axios get response: ", response);
+            const nuestraLista = response.data && response.data.records ? response.data.records : []
+            this.setState({ list : nuestraLista })
+          })
+          .catch((error) => {
+              console.log("axios get error: ", error);
+          });
     }
 
-    pintarCelda(item) {
+    checkIsSelected(item) {
+        if(this.state.selected != null && (this.state.selected.id == item.id)){
+            return true
+        } else {
+            return false
+        }
+    }
+
+    onSelectedItem(item) {
+        this.setState({ selected: item })
+    }
+
+    renderItem(item, index) {
+        const isSelected = this.checkIsSelected(item)
+        const cellStyle = isSelected ? { backgroundColor: Colors.red } : { backgroundColor: Colors.pink }
+        const titleStyle = isSelected ? { color: 'white', fontWeight: '400', fontSize: 20 } : { color: 'black' }
+        const titleColor = isSelected ? 'white' : 'black'
         return (
-            <View style={{height: 200, backgroundColor: 'grey', marginVertical: 10}}>
-                <Text>{ item.nombre }</Text>
+            <View style={[styles.cell, cellStyle]}>
+                <Text style={titleStyle}>{ item.nombre }</Text>
 
                 <Button
-                    title={'Pulsa y te saco un log, a lo loco!'}
-                    onPress={ () => this.setState({ selected: item})}
+                    title={'Seleccionar casa'}
+                    onPress={ () => this.onSelectedItem(item)}
+                    color={ titleColor }
                 />
             </View>
         )
@@ -42,12 +58,28 @@ export default class HousesList extends Component {
         const nombre = this.state.selected ? this.state.selected.nombre : ''
         return (
             <View>
-                <Text>{ nombre }</Text>
+                <Text style={styles.title}>{ nombre }</Text>
                 <FlatList
                 data={ this.state.list }
-                renderItem={ ({ item }) => this.pintarCelda(item)}
+                renderItem={ ({ item, index }) => this.renderItem(item, index)}
+                keyExtractor={ (item, index) => item.id}
+                extraData={ this.state }
                 />
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+
+    cell: {
+        height: 200,
+        marginVertical: 10
+    },
+
+    title: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginVertical: 20
+    }
+})
