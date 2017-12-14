@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native'
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity } from 'react-native'
 import { AsyncCalls, Colors } from 'react_native_app/src/commons'
+import HousesCell from './HousesCell'
 
 export default class HousesList extends Component {
 
@@ -50,6 +51,9 @@ export default class HousesList extends Component {
                     onPress={ () => this.onSelectedItem(item)}
                     color={ titleColor }
                 />
+                <TouchableOpacity style={styles.button} onPress={ () => this.onSelectedItem(item)}>
+                    <Text style={styles.buttonText}>{'Seleccionar casa'}</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -57,20 +61,24 @@ export default class HousesList extends Component {
     render() {
         const nombre = this.state.selected ? this.state.selected.nombre : ''
         return (
-            <View>
-                <Text style={styles.title}>{ nombre }</Text>
+            <View style={styles.container}>
+                
                 <FlatList
                 data={ this.state.list }
                 renderItem={ ({ item, index }) => this.renderItem(item, index)}
                 keyExtractor={ (item, index) => item.id}
                 extraData={ this.state }
                 />
+                
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
 
     cell: {
         height: 200,
@@ -81,5 +89,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         marginVertical: 20
+    },
+
+    button: {
+        borderColor: 'white',
+        borderWidth: 1,
+        padding: 10,
+        margin: 20,
+        borderRadius: 6,
+    },
+
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        textAlign: 'center'
     }
 })
