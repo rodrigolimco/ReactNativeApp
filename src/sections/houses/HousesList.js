@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { /*AsyncCalls,*/ Colors } from 'react_native_app/src/commons'
 import HousesCell from './HousesCell'
+import { Actions } from 'react-native-router-flux'
 
 import { connect } from 'react-redux'
 import * as HousesActions from 'react_native_app/src/redux/actions/houses'
@@ -10,10 +11,6 @@ class HousesList extends Component {
     
     componentWillMount() {
        this.props.fetchHousesList()
-    }
-
-    onSelect(house){
-        this.props.updateSelected(house)
     }
 
     renderFooter(){
@@ -35,6 +32,10 @@ class HousesList extends Component {
         }*/
     }
 
+    onSelect(house){
+        this.props.updateSelected(house)
+    }
+
     renderItem(item, index) {
         return <HousesCell 
                     item={item}
@@ -53,7 +54,7 @@ class HousesList extends Component {
                 ListFooterComponent={ () => this.renderFooter() }
                 renderItem={ ({ item, index }) => this.renderItem(item, index)}
                 keyExtractor={ (item, index) => item.id}
-                extraData={ this.state }
+                extraData={ this.props }
                 numColumns={2}
                 />
                 
@@ -66,7 +67,7 @@ class HousesList extends Component {
 const mapStateToProps =  (state) => {
     return {
         list: state.houses.list,
-        selected: state.houses.item,
+        //selected: state.houses.item,
         isFetching: state.houses.isFetching
     }
 }
@@ -79,6 +80,7 @@ const mapDispatchToProps = (dispatch, props) => {
 
         updateSelected: (house) => {
             dispatch(HousesActions.updateHouseSelected(house))
+            Actions.CharactersList({ title: house.nombre })
         }
     }
 }
@@ -91,7 +93,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(HousesList)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'rgb(42,42,42)',
-        paddingVertical: 20,
+        backgroundColor: Colors.background,
+        paddingBottom: 20,
+        paddingTop: 60
     },
 })
