@@ -20,7 +20,7 @@ class HousesList extends Component {
             color="grey" 
             style={{ marginVertical: 20}} 
             />
-
+            
         /*if(this.props.isFetching){
             return (
                 <View>

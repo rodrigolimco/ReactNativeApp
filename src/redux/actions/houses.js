@@ -36,7 +36,7 @@ export function fetchHousesList() { // Función que carga del WS el listado
             dispatch(updateHousesList(list))
 
         }).catch( error => {
-            dispatch(setHousesFetching(true))
+            dispatch(setHousesFetching(false))
             console.log("error: ", error)
         })
                
