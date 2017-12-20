@@ -1,5 +1,7 @@
 import * as types from '../types/characters'
-import { fetch, post } from 'react_native_app/src/webservices/webservices'
+import { fetch, post, remove } from 'react_native_app/src/webservices/webservices'
+import { Actions } from 'react-native-router-flux'
+
 
 function updateCharactersList(value) { 
     return {
@@ -42,6 +44,30 @@ export function fetchCharactersList(houseId) {
         }).catch( error => {
 
             console.log("fetchCharactersList error: ", error)
+            dispatch(setCharactersFetching(false))
+
+        })
+    }
+}
+
+export function deleteCharacter(){
+    return(dispatch, getState) =>{
+
+        dispatch(setCharactersFetching(true))
+        const state= getState()
+        const house = state.houses.item
+
+
+        const fetchUrl = '/personajes/' + character.id
+        remove( fetchUrl ).then (response => {
+            dispatch(setCharactersFetching(false))
+            if (response.status & response.status == 'ok'){
+                dispatch(fetchCharactersList(house.id))
+                dispatch(updateCharacterSelected(null))
+                Actions.pop()
+            }
+
+        }).catch( error => {
             dispatch(setCharactersFetching(false))
 
         })

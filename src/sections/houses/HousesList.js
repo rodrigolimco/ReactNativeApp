@@ -24,7 +24,12 @@ class HousesList extends Component {
         /*if(this.props.isFetching){
             return (
                 <View>
-                    <ActivityIndicator size="large" color="#0000ff"/>
+                    <ActivityIndicator 
+                        animating={true}
+                        size="large" 
+                        color="grey"
+                        style={{ marginVertical: 20}}
+                    />
                 </View>
             )
         } else {

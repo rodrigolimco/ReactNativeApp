@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FlatList, View, StyleSheet } from 'react-native'
 import { Colors } from 'react_native_app/src/commons'
+import { Actions } from 'react-native-router-flux'
 
 // Importamos nuestra celda
 import CharacterCell from './CharacterCell'
@@ -45,8 +46,9 @@ class CharactersList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        house   : state.houses.item,
-        list    : state.characters.list,
+        house        : state.houses.item,
+        list         : state.characters.list,
+        character    : state.characters.item,
     }
 }
 
@@ -58,6 +60,8 @@ const mapDispatchToProps = (dispatch, props) => {
         },
 
         updateSelected: (character) => {
+            dispatch(CharactersActions.updateCharacterSelected(character))
+            Actions.CharacterView({ title: character.nombre })
 
         },
     }
