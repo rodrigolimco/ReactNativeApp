@@ -17,7 +17,6 @@ export default class Button extends Component{
         if(!this.props.isFetching){
             this.props.onPress()
         }
-
     }
 
     render(){

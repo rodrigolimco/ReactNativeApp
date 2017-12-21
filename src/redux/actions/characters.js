@@ -72,7 +72,7 @@ export function deleteCharacter(){
     }
 }
 
-export function postCharacter(data){
+/*export function postCharacter(data){
     return(dispatch, getState =>{
 
         dispatch(setCharactersFetching(true))
@@ -81,7 +81,7 @@ export function postCharacter(data){
 
         const fetchUrl = '/personajes'
         post(fetchUrl, data).then( response => {
-            
+
             dispatch(setCharactersFetching(false))
 
             if (response.record){
@@ -94,4 +94,30 @@ export function postCharacter(data){
             dispatch(setCharactersFetching(false))
         })
     })
-}
+}*/
+
+export function postCharacter(data) {
+    return (dispatch, getState) => {
+
+        dispatch(setCharactersFetching(true))
+        const state = getState()
+        const house = state.houses.item
+
+        const fetchUrl = '/personajes'
+        post(fetchUrl, data).then( response => {
+
+            dispatch(setCharactersFetching(false))
+            console.log("postCharacter response: ", response)
+
+            if (response.record) {
+                dispatch(fetchCharactersList(house.id))
+                dispatch(updateCharacterSelected(null))
+                Actions.pop()
+            }
+
+        }).catch( error => {
+            dispatch(setCharactersFetching(false))
+            console.log("postCharacter error: ", error)
+        })
+    }
+} 

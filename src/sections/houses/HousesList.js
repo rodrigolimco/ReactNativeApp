@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
-import { /*AsyncCalls,*/ Colors } from 'react_native_app/src/commons'
+import { Colors } from 'react_native_app/src/commons'
 import HousesCell from './HousesCell'
 import { Actions } from 'react-native-router-flux'
 

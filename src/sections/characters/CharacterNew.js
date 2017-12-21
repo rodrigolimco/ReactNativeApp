@@ -50,7 +50,7 @@ class CharacterNew extends Component {
         if( this.validateForm() ){
             const characterData = {
                 nombre: this.state.name,
-                edad: this.state.age ? this.state.age : null,
+                edad: this.state.age,
                 image: this.state.image ? 'data:image/jpeg; base 64,' +this.state.image.data : null,
                 casa: this.props.house.id
             }
@@ -146,8 +146,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-    postCharacter: (data) => {
-        dispatch(CharactersActions.postCharacter(data))
+    return{
+        postCharacter: (data) => {
+            dispatch(CharactersActions.postCharacter(data))
+        }
     }
 }
 
