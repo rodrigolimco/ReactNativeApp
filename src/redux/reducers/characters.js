@@ -16,13 +16,19 @@ export default function reducer( state = initialState, action = {}){
                 list: action.value
             };
         
-            case types.CHARACTERS_UPDATE_CHARACTER:
+        case types.CHARACTERS_UPDATE_CHARACTER:
             return{
                 ...state,
                 item: action.value
-            }
+            };
 
-            default:
+        case types.CHARACTERS_SET_FETCHING:
+        return{
+            ...state,
+            isFetching: action.value
+        };
+
+        default:
             return state;
     }
 }
