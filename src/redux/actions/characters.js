@@ -1,13 +1,23 @@
 import * as types from '../types/characters'
 import { fetch, post, remove } from 'react_native_app/src/webservices/webservices'
 import { Actions } from 'react-native-router-flux'
+import qs from 'qs'
 
 
-function updateCharactersList(value) { 
+function updateCharactersList(list, total) { 
     return {
         type: types.CHARACTERS_UPDATE_LIST,
-        value: value
+        list,
+        total,
     }
+}
+
+export function updateCharactersListOffset(value){
+    return {
+        type: types.CHARACTERS_UPDATE_LIST_OFFSET,
+        value,
+    }
+
 }
 
 function setCharactersFetching(value) {
@@ -24,22 +34,52 @@ export function updateCharacterSelected(value) {
     }
 }
 
-export function fetchCharactersList(houseId) {
+export function initCharactersList(){
     return (dispatch, getState) => {
 
-        // Forma alternativa de acceder al state global
-        // const state = getState()
-        // const houseIdAlternativo = state.houses.item ? state.houses.item.id : null
+        // Rest characters list and set total to 0
+        dispatch(updateCharactersList([], 0))
+
+        // Set offset to 0
+        dispatch(updateCharactersListOffset(0))
+
+        // Fetch list
+        dispatch(fetchCharactersList())
+    }
+}
+
+
+
+export function fetchCharactersList() {
+    return (dispatch, getState) => {
+
+        
 
         dispatch(setCharactersFetching(true))
-        dispatch(updateCharactersList([]))
+        //dispatch(updateCharactersList([]))
+
+        const state = getState() // Get redux state
+        const houseId = state.houses.item ? state.houses.item.id : null // Get selected house id
+        const list = state.characters.list // Get current characters list
+
+        const offset = state.characters.offset
+        const limit = 10
+
+        const filters = {
+            casa: houseId,
+            offset: offset,
+            limit: limit,
+        }
     
-        const fetchUrl = '/personajes?casa=' + houseId
+        const fetchUrl = '/personajes?' + qs.stringify(filters)
+        
         fetch( fetchUrl ).then(response => {
 
             console.log("fetchCharactersList response: ", response)
             dispatch(setCharactersFetching(false))
-            dispatch(updateCharactersList(response.records)) // Actualizamos el reducer con el listado
+
+            const newList = [...list, ...response.records] // Concat current list with new results
+            dispatch(updateCharactersList(newList, response.total)) // Actualizamos el reducer con el listado
 
         }).catch( error => {
 

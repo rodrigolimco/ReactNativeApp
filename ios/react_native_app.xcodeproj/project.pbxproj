@@ -1214,6 +1214,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = RodrigoLimpiasCossio.ReactNativeApp;
 				PRODUCT_NAME = react_native_app;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1232,6 +1233,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = RodrigoLimpiasCossio.ReactNativeApp;
 				PRODUCT_NAME = react_native_app;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
